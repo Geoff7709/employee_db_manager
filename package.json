@@ -1,0 +1,23 @@
+{
+  "name": "employee_db_manager",
+  "version": "1.0.0",
+  "description": "A CLI to manage and employee database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Geoff7709/employee_db_manager.git"
+  },
+  "author": "Geoffrey Zimmerman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Geoff7709/employee_db_manager/issues"
+  },
+  "homepage": "https://github.com/Geoff7709/employee_db_manager#readme",
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
