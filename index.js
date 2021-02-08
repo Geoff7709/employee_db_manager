@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
-const cTable = require('console.table'); 
+const cTable = require('console.table');
+const Department = require('./lib/Department.js') 
 const connection = mysql.createConnection({
     host: 'localhost',
     port: 3306,
@@ -9,58 +10,74 @@ const connection = mysql.createConnection({
     database: 'someCorp_db'
 });
 
-const choices = [
-    'View Departments', 'View Roles', 'View Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role', 'Exit']
+const actionChoices = [
+    'View Departments', 'View Roles', 'View Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role', 'Exit'
+];
+
+
 
 const action = [
     {
         type: 'list',
         name: 'action',
         message: 'What would you like to do?',
-        choices: choices
+        choices: actionChoices
     }
 ];
 
+// `SELECT GROUP_CONCAT(dep_name) AS returned_values FROM ( SELECT dep_name FROM department) as department`, (err, res) => {
+//     if (err) console.log(err);
+//     res[0].returned_values.split(',').forEach((item) => departmentChoices.push(item) )
+// }
 
 connection.connect((err) => {
     if (err) throw err;
     console.log(`Connected to mysql on thread ${connection.threadId}`)
     init()
 })
-
+function findDepartments() {
+    let departments = []
+        connection.query(`SELECT * FROM department`, (err, res) => {
+            if (err) console.log(err);
+            res.forEach(element => {
+                departments.push(element.dep_name);
+            });
+        });
+        return departments;
+}
 const init = () => {
     inquirer.prompt(action)
         .then(answer => {
             switch(answer.action) {
-                case choices[0]:
+                case actionChoices[0]:
                     viewDepartments();
                     break;
 
-                case choices[1]:
+                case actionChoices[1]:
                     viewRoles();
                     break;
 
-                case choices[2]:
+                case actionChoices[2]:
                     viewEmployees();
                     break;
 
-                case choices[3]:
+                case actionChoices[3]:
                     addDepartment();
                     break;
 
-                case choices[4]:
+                case actionChoices[4]:
                     addRole();
                     break;
 
-                case choices[5]:
+                case actionChoices[5]:
                     addEmployee();
                     break;
 
-                case choices[6]:
+                case actionChoices[6]:
                     updateEmployee();
                     break;
 
-                case choices[7]:
+                case actionChoices[7]:
                     exit();
                     break;   
             }
@@ -72,8 +89,7 @@ const viewDepartments = () => {
     connection.query('SELECT * FROM department', (err, res) => {
         if (err) console.log(err);
         console.table('Departments', res);
-        anotherAction();
-        
+        anotherAction();   
     })
 }
 
@@ -93,14 +109,52 @@ const viewEmployees = () => {
     })
 }
 
-const addDepartment = () => {
-    console.log('addDepartment');
-    anotherAction();
+const addDepartment  =  () => {
+    inquirer.prompt(
+        [
+            {
+                type: 'input',
+                name: 'emp_department',
+                message: 'What is the name of the new department you would like to add?'
+            }
+        ]
+    )
+    .then(answer => {
+        connection.query(`INSERT INTO department (dep_name) VALUES ('${answer.emp_department}')`, (err, res) => {
+            if (err) console.log(err);
+            viewDepartments();   
+        })
+    })
 }
 
 const addRole = () => {
-    console.log('addRole');
-    anotherAction();
+    inquirer.prompt(
+        [
+            {
+                type: 'input',
+                name: 'title',
+                message: 'What is the name of the new role you would like to add?'
+            },
+            {
+                type: 'input',
+                name: 'salary',
+                message: 'What is the yearly salary of the new role?'
+            },
+            {
+                type: 'list',
+                name: 'department',
+                message: 'What department is this role part of?',
+                choices:  findDepartments() 
+                
+            }
+        ]
+    )
+    .then(answer => {
+        connection.query(`INSERT INTO emp_role (title, salary, department_id) VALUES ('${answer.title}', '${answer.salary}', (SELECT id FROM department WHERE dep_name = '${answer.department}'))`, (err, res) => {
+            if (err) console.log(err);
+            viewRoles();   
+        })
+    }) 
 }
 
 const addEmployee = () => {
@@ -117,15 +171,14 @@ const anotherAction = () => {
     inquirer.prompt(
         [
             {
-                type: 'list',
+                type: 'confirm',
                 name: 'continue',
-                message: 'What would you like to do something else?',
-                choices: ['Yes', 'No']   
+                message: 'What would you like to do something else?',  
             }
         ]
         )
         .then(answer => {
-            if (answer.continue === 'Yes') {
+            if (answer.continue === true) {
                 init()
             }else{
                 exit()

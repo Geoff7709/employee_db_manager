@@ -35,22 +35,22 @@ INSERT INTO department (dep_name) VALUES ('Legal');
 INSERT INTO department (dep_name) VALUES ('Human Resources');
 
 INSERT INTO emp_role (title, salary, department_id) VALUES ('CEO', 500000, 1);
-INSERT INTO emp_role (title, salary, department_id) VALUES '(VP_Logistics', 300000, 1);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('VP Logistics', 300000, 1);
 INSERT INTO emp_role (title, salary, department_id) VALUES ('CFO', 300000, 1);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('VP_Human_Resources', 300000, 1);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('Project_Manager', 130000, 2);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('VP Human Resources', 300000, 1);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('Project Manager', 130000, 2);
 INSERT INTO emp_role (title, salary, department_id) VALUES ('Engineer', 75000, 2);
-INSERT INTO emp_role (title, salary, department_id) VALUES '(Accountant', 100000, 3);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('Advertising_Coordinator', 130000, 4);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('Media_Specialist', 75000, 4);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('Corporate_Council', 130000, 5);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('Accountant', 100000, 3);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('Advertising Coordinator', 130000, 4);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('Media Specialist', 75000, 4);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('Corporate Council', 130000, 5);
 INSERT INTO emp_role (title, salary, department_id) VALUES ('Clerk', 75000, 5);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('HR_Representative', 100000, 6);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('Tech_Intern', 35000, 2);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('Accounting_Intern', 35000, 3);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('Communications_Intern', 35000, 4);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('Legal_Intern', 35000, 5);
-INSERT INTO emp_role (title, salary, department_id) VALUES ('HR_Intern', 35000, 6);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('HR Representative', 100000, 6);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('Tech Intern', 35000, 2);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('Accounting Intern', 35000, 3);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('Communications Intern', 35000, 4);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('Legal Intern', 35000, 5);
+INSERT INTO emp_role (title, salary, department_id) VALUES ('HR Intern', 35000, 6);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Geoffrey', 'Zimmerman', 1, null);
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Lenna', 'Rollinson', 2, null);
@@ -82,10 +82,3 @@ INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Genay
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Bernard', 'Wirth', 17, 27);
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Lorilee', 'Stephens', 17, 27);
 INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Chad',' Rumph', 17, 27);
-
-
-
-
-
-
-
