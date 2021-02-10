@@ -37,13 +37,50 @@ connection.connect((err) => {
 })
 function findDepartments() {
     let departments = []
-        connection.query(`SELECT * FROM department`, (err, res) => {
+        connection.query(`SELECT dep_name FROM department`, (err, res) => {
             if (err) console.log(err);
             res.forEach(element => {
-                departments.push(element.dep_name);
+                departments.push(element);
             });
         });
         return departments;
+}
+
+function findRoles() {
+    let roles = []
+        connection.query(`SELECT title FROM emp_role`, (err, res) => {
+            if (err) console.log(err);
+            // console.log(res)
+            res.forEach(element => {
+                roles.push(element.title);
+            });
+        });
+        return roles;
+}
+
+function findManagers() {
+    // let managers = []
+        connection.query(`SELECT  id, first_name, last_name FROM employee WHERE manager_id = 0`, (err, res) => {
+            if (err) console.log(err);
+            let managerName
+            res.forEach(element => {
+                managerName = `${element.id} ${element.first_name} ${element.last_name}`
+                managers.push(managerName);
+            });
+        });
+        return managers;
+}
+function findEmployees() {
+    let employees = []
+        connection.query(`SELECT  id, first_name, last_name FROM employee WHERE manager_id = 0`, (err, res) => {
+            if (err) console.log(err);
+            let managerName
+            res.forEach(element => {
+                managerName = `${element.id} ${element.first_name} ${element.last_name}`
+                managers.push(managerName);
+            });
+        });
+        return managers;
 }
 const init = () => {
     inquirer.prompt(action)
@@ -133,7 +170,7 @@ const addRole = () => {
             {
                 type: 'input',
                 name: 'title',
-                message: 'What is the name of the new role you would like to add?'
+                message: 'What is the title of the new role you would like to add?'
             },
             {
                 type: 'input',
@@ -158,8 +195,45 @@ const addRole = () => {
 }
 
 const addEmployee = () => {
-    console.log('addEmployee');
-    anotherAction();
+    inquirer.prompt(
+        [
+            {
+                type: 'input',
+                name: 'first_name',
+                message: 'What is the first name of the employee you would like to add?'
+            },
+            {
+                type: 'input',
+                name: 'last_name',
+                message: 'What is the last name of the employee you would like to add?'
+            },
+            {
+                type: 'list',
+                name: 'role',
+                message: 'What is the role of the new employee?',
+                choices:  findRoles() 
+                
+            },
+            {
+                type: 'list',
+                name: 'manager',
+                message: 'Who is the manager for the new employee?',
+                choices:  findManagers() 
+                
+            }
+
+        ]
+    )
+    .then(answer => {
+        const managerObject = answer.manager.split(' ')
+        const mgrId = parseInt(managerObject[0])
+        console.log(mgrId)
+        console.log(typeof mgrId)
+        connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${answer.first_name}', '${answer.last_name}', (SELECT id FROM emp_role WHERE title = '${answer.role}'), ${mgrId})`, (err, res) => {
+            if (err) console.log(err);
+            viewEmployees();   
+        })
+    });
 }
 
 const updateEmployee = () => {
