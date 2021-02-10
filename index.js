@@ -45,6 +45,30 @@ function findDepartments() {
         });
         return departments;
 }
+function findRoles() {
+    let roles = []
+        connection.query(`SELECT title FROM emp_role`, (err, res) => {
+            if (err) console.log(err);
+            // let roleName
+            res.forEach(element => {
+                // roleName = `${elment.id} ${element.title}`
+                roles.push(element.title);
+            });
+        });
+        return roles;
+}
+function findManagers() {
+    let managers = []
+        connection.query(`SELECT id, first_name, last_name FROM employee WHERE manager_id = 0`, (err, res) => {
+            if (err) console.log(err);
+            let managerName
+            res.forEach(element => {
+                managerName = `${elment.id} ${element.first_name} ${element.last_name}`
+                managers.push(managerName);
+            });
+        });
+        return managers;
+}
 const init = () => {
     inquirer.prompt(action)
         .then(answer => {
@@ -158,8 +182,44 @@ const addRole = () => {
 }
 
 const addEmployee = () => {
-    console.log('addEmployee');
-    anotherAction();
+        inquirer.prompt(
+            [
+                {
+                    type: 'input',
+                    name: 'first_name',
+                    message: 'What is the first name of the new employee?'
+                },
+                {
+                    type: 'input',
+                    name: 'last_name',
+                    message: 'What is the last name of the new employee?'
+                },
+                {
+                    type: 'list',
+                    name: 'role',
+                    message: 'What is the title of the new employee?',
+                    choices:  findRoles() 
+                    
+                },
+                {
+                    type: 'list',
+                    name: 'manager',
+                    message: "Who is the new employee's manager?",
+                    choices:  findManagers() 
+                    
+                }
+            ]
+        )
+    .then(answer => {
+            const managerObject = answer.manager.split(' ')
+            const mgrId = parseInt(managerObject[0])
+            console.log(mgrId)
+            console.log(typeof mgrId)
+            connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${answer.first_name}', '${answer.last_name}', (SELECT id FROM emp_role WHERE title = '${answer.role}'), ${mgrId})`, (err, res) => {
+                if (err) console.log(err);
+                viewEmployees();   
+            })
+        });
 }
 
 const updateEmployee = () => {
